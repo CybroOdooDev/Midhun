@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="module_category_taxsurety" model="ir.module.category">
+        <field name="name">Taxsurety</field>
+        <field name="description">Category For Taxsurety</field>
+        <field name="sequence">20</field>
+    </record>
+
+    <record id="group_taxsurety_tax_administrators" model="res.groups">
+        <field name="name">Tax Administrators</field>
+        <field name="category_id" ref="module_category_taxsurety"/>
+    </record>
+    <record id="group_taxsurety_tax_preparers" model="res.groups">
+        <field name="name">Tax Preparers</field>
+        <field name="category_id" ref="module_category_taxsurety"/>
+    </record>
+    <record id="group_taxsurety_bookkeeprs" model="res.groups">
+        <field name="name">Bookkeepers</field>
+        <field name="category_id" ref="module_category_taxsurety"/>
+    </record>
+    <record id="group_taxsurety_internal_accountants" model="res.groups">
+        <field name="name">Internal Accountants</field>
+        <field name="category_id" ref="module_category_taxsurety"/>
+    </record>
+    <record id="group_taxsurety_graphic_designers" model="res.groups">
+        <field name="name">Graphic Designers</field>
+        <field name="category_id" ref="module_category_taxsurety"/>
+    </record>
+    <record id="group_taxsurety_brand_managers" model="res.groups">
+        <field name="name">Brand Managers</field>
+        <field name="category_id" ref="module_category_taxsurety"/>
+    </record>
+    <record id="group_taxsurety_tax_managers" model="res.groups">
+        <field name="name">Tax Managers</field>
+        <field name="category_id" ref="module_category_taxsurety"/>
+    </record>
+    <record id="group_taxsurety_tax_managers" model="res.groups">
+        <field name="name">Accounting Manager</field>
+        <field name="category_id" ref="module_category_taxsurety"/>
+    </record>
+    <record id="group_taxsurety_cfo" model="res.groups">
+        <field name="name">CFO</field>
+        <field name="category_id" ref="module_category_taxsurety"/>
+    </record>
+    <record id="group_taxsurety_ceo" model="res.groups">
+        <field name="name">CEO</field>
+        <field name="category_id" ref="module_category_taxsurety"/>
+    </record>
+    <record id="group_taxsurety_ceo" model="res.groups">
+        <field name="name">CEO</field>
+        <field name="category_id" ref="module_category_taxsurety"/>
+    </record>
+    <record id="group_taxsurety_cio" model="res.groups">
+        <field name="name">CIO</field>
+        <field name="category_id" ref="module_category_taxsurety"/>
+    </record>
+    <record id="group_taxsurety_software_developers" model="res.groups">
+        <field name="name">Software Developers</field>
+        <field name="category_id" ref="module_category_taxsurety"/>
+    </record>
+    <record id="group_taxsurety_marketing_administrators" model="res.groups">
+        <field name="name">Marketing Administrators</field>
+        <field name="category_id" ref="module_category_taxsurety"/>
+    </record>
+
+</odoo>

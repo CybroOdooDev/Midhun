@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="taxsurety_confirmation"
+              inherit_id="website_sale.confirmation">
+        <xpath expr="//p[@role='status']"
+               position="replace">
+            <p t-if="request.website.is_signup_disabled"
+               class="alert alert-info mt-3" role="status">
+                An Email will be sent to you for signup.
+            </p>
+            <p t-else="">
+                <p class="alert alert-info mt-3" role="status">
+                    <a role="button"
+                       t-att-href='order.partner_id.signup_prepare() and order.partner_id.with_context(relative_url=True).signup_url'
+                       class='btn btn-primary'>Sign Up
+                    </a>
+                    to follow your order.
+                </p>
+            </p>
+        </xpath>
+    </template>
+
+    <template id="taxsurety_shop_restrict"
+              inherit_id="website_sale.header_cart_link">
+        <xpath expr="//li[contains(@t-attf-class, 'o_wsale_my_cart')]"
+               position="attributes">
+            <attribute name="t-if">not request.website.is_shop_disabled</attribute>
+        </xpath>
+    </template>
+
+</odoo>

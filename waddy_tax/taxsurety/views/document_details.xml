@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="document_details" name="Document Details">
+        <t t-call="portal.portal_layout">
+            <div class="o_portal_html_view shadow p-3 mt-3 row o_portal_custom">
+                <div class="col col--preview-container"
+                     style="text-align: center;">
+
+                    <t t-if="document.type == 'binary'">
+                        <img t-if="document.attachment_id.index_content == 'image'"
+                             class="doc_image"
+                             t-attf-src="data:image/jpg;base64,{{ document.attachment_id.datas }}"/>
+
+                        <video t-elif="document.attachment_id.index_content == 'video'"
+                               class="doc_image"
+                               controls="controls">
+                            <source t-attf-src="data:video/webm;base64, {{ document.attachment_id.datas }}"/>
+                        </video>
+
+                        <embed t-elif="document.attachment_id.mimetype == 'application/pdf'"
+                               style="width: 100%; height: 300px; border: 1px solid;"
+                               t-attf-src="data:application/pdf;base64, {{ document.attachment_id.datas }}"
+                               class="doc_image"
+                               target="_blank"/>
+
+                        <div t-else="">
+                            <img t-att-src="'/documents/image/%s?field=thumbnail&amp;unique=undefined' % document.id"/>
+                        </div>
+
+                        <label for="doc_uploader_details"
+                               class="mt-2"
+                               id="label_for_doc_uploader_document_upload"
+                               style="display: flex; justify-content: center; width: inherit;">
+                            <div id="reUploadButton"
+                                    class="reupload_button btn btn-primary"
+                                 >
+                            Re-upload
+                            </div>
+                        </label>
+
+                    </t>
+                    <t t-elif="document.type == 'url'">
+                        <iframe id="url_doc"
+                                style="width: 100%; height: 300px; border: 1px solid;"
+                                class="doc_image"
+                                frameborder="0" scrolling="yes"
+                                t-att-src="document.url"/>
+                    </t>
+                    <t t-elif="document.type == 'empty'">
+                        Click on the image to upload file.
+                        <label for="doc_uploader_details"
+                               class="mt-2"
+                               id="label_for_doc_uploader_document_upload"
+                               style="display: flex; justify-content: center; width: inherit;">
+                            <img id="doc_uploaded"
+                                 src="/taxsurety/static/src/images/file-arrow-up-solid.svg"
+                                 class="doc_image mt-3"
+                                 style="max-height: 300px; cursor: pointer;"/>
+                        </label>
+                    </t>
+                </div>
+                <div class="col"
+                     style="justify-content: center; display: flex;">
+                    <form action="/my/documents/update"
+                          class="upload_form submission__form"
+                          method="post"
+                          id="doc-form"
+                          name="document_form"
+                          enctype="multipart/form-data">
+                        <input id="doc_uploader_details"
+                               type="file"
+                               class="file doc_uploader"
+                               data-show-upload="true"
+                               data-show-caption="true"
+                               data-show-preview="true"
+                               name="doc_uploaded"
+                               hidden="true"/>
+                        <input type="hidden"
+                               name="document_id"
+                               id="document_id"
+                               t-att-value="document.id"/>
+                        <input id="file_name_document_upload"
+                               name="file_name"
+                               type="hidden"/>
+                        <input type="hidden"
+                               name="file_type"
+                               id="file_type_document_upload"/>
+                        <div class="doc-name">
+                            <input type="text"
+                                   name="document_name"
+                                   id="document_name"
+                                   class="from-control"
+                                   style="width: 100%;"
+                                   title="Edit and click update button to update."
+                                   t-att-value="document.name"/>
+                        </div>
+                        <div class="doc-update-date">
+                            Last Updated:
+                            <t t-esc="document.write_date.strftime('%Y-%m-%d - %H:%M:%S')"/>
+                        </div>
+                        <div t-if="document.partner_id.name"
+                             class="doc-customer">
+                            Customer:
+                            <t t-esc="document.partner_id.name"/>
+                        </div>
+                        <div t-if="document.owner_id" class="doc-owner">
+                            Owner:
+                            <t t-esc="document.owner_id.name"/>
+                        </div>
+                        <div t-if="document.folder_id" class="doc-owner">
+                            Workspace:
+                            <a class="btn btn-primary tag-span"
+                                    t-esc="document.folder_id.name"
+                                    t-att-href="'/my/documents?search_in=workspace&amp;search=%s' %document.folder_id.name"
+                                    t-att-title="document.folder_id.name"/>
+                        </div>
+                        <div class="doc-tags">
+                            Tags:
+                            <t t-foreach="document.tag_ids" t-as="tag">
+                                <a class="btn btn-primary tag-span"
+                                   t-esc="tag.name"
+                                   t-att-href="'/my/documents?filterby=%s' %tag.id"/>
+                            </t>
+                        </div>
+                        <div class="doc-submit-download mt-2">
+                            <input type="submit" class="btn btn-secondary"
+                                   value="Update"/>
+                            <t t-if="document.type == 'binary'">
+                                <span class="doc-download">
+                                    <a t-attf-href="/web/taxsurety/#{document.id}?download=true}"
+                                       target="_blank"
+                                       title="Download file">
+                                        <i class="fa fa-download"/>
+                                    </a>
+                                </span>
+                            </t>
+
+                            <t t-if="document.type == 'url'">
+                                <span class="doc-download">
+                                    <a t-att-href="document.url"
+                                       target="_blank"
+                                       t-att-title="'Goto: ' + document.url">
+                                        <i class="fa fa-globe"/>
+                                        Goto File
+                                    </a>
+                                </span>
+                            </t>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="mt32" id="document" data-anchor="true">
+                <h4>
+                    <strong>Message and communication history</strong>
+                </h4>
+                <t t-call="taxsurety.document_chatter">
+                    <t t-set="document" t-value="document"/>
+                    <t t-set="document_access" t-value="True"/>
+                </t>
+
+            </div>
+
+        </t>
+    </template>
+
+    <template id="document_chatter">
+        <div id="discussion" data-anchor="true"
+             class="d-print-none o_portal_chatter o_not_editable p-0"
+             t-att-data-res_model="document._name"
+             t-att-data-pid="pid"
+             t-att-data-hash="hash"
+             t-att-data-document_access="document_access"
+             t-att-data-res_id="document.id"
+             t-att-data-pager_step="message_per_page or 10"
+             t-att-data-allow_composer="'0' if disable_composer else '1'"
+             t-att-data-two_columns="'true' if two_columns else 'false'">
+        </div>
+    </template>
+</odoo>

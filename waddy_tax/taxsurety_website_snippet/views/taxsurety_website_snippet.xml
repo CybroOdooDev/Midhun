@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="s_typing_snippet" name="Typing Snippet">
+        <section class="oe_structure container ">
+            <div class="row">
+                <section id="typing_snippet">
+                <h1>Coding is <span id="typing_snippet_span"></span></h1>
+                </section>
+            </div>
+        </section>
+    </template>
+
+    <template id="external_snippets" inherit_id="website.snippets" priority="8">
+        <xpath expr="//div[@id='snippet_effect']//t[@t-snippet][last()]"
+               position="after">
+            <t t-snippet="taxsurety_website_snippet.s_typing_snippet"/>
+        </xpath>
+    </template>
+
+    <template id="typing_snippet_options" inherit_id="website.snippet_options">
+        <xpath expr="." position="inside">
+            <div data-selector="#typing_snippet_span">
+                <we-row string="Color">
+                    <we-colorpicker t-att-data-apply-to="apply_to"
+                                    data-css-property="color"
+                                    data-select-style="true"
+                                    data-color-prefix="text-"/>
+                </we-row>
+                <we-input data-name="first" string="First" data-first-text-value=""/>
+                <we-input data-name="second" string="Second" data-second-text-value=""/>
+            </div>
+        </xpath>
+    </template>
+
+</odoo>

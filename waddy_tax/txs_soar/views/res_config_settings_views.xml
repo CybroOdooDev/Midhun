@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.txs.soar</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="10"/>
+        <field name="inherit_id" ref="website.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@id='website_info_settings']" position="after">
+                <h2>Rss Feed</h2>
+                <div class="row mt16 o_settings_container"
+                     name="dashboard_columns_settings_container">
+                    <div class="col-12 col-lg-6 o_setting_box"
+                         id="rss_feed">
+                        <div class="o_setting_left_pane">
+                            <field name="activate_rss_feed"/>
+                        </div>
+                        <div class="o_setting_right_pane">
+                            <span class="o_form_label">Activate Rss Feed</span>
+                            <div class="text-muted">Activate Rss Feed for Rss Feed Snippet
+                            </div>
+                            <div attrs="{'invisible': [('activate_rss_feed', '=', False)]}">
+                                <div class="text-muted">Give Rss Feed Url
+                                </div>
+                                <field name="rss_feed_url"
+                                       attrs="{'required': [('activate_rss_feed', '=', True)]}"/>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

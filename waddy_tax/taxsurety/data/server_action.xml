@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record model="ir.actions.server"
+            id="action_update_contacts">
+        <field name="name">Update contacts through excel</field>
+        <field name="model_id" ref="taxsurety.model_res_partner"/>
+        <field name="binding_model_id" ref="taxsurety.model_res_partner"/>
+        <field name="state">code</field>
+        <field name="code">
+            action = records.action_update_contacts_through_excel()
+        </field>
+    </record>
+</odoo>

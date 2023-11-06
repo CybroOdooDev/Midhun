@@ -1,0 +1,7 @@
+.rss_feed_contents a {
+    color: black;
+}
+
+.rss_feed_contents a:hover {
+    color: grey;
+}

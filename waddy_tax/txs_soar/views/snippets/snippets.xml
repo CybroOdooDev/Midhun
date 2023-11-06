@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="sport_erp_snippets" inherit_id="website.snippets">
+        <xpath expr="//t[@id='default_snippets']" position="inside">
+
+            <div id="snippet_sportERP" class="o_panel">
+                <div class="o_panel_header">Custom Snippets</div>
+                <div class="o_panel_body">
+                    <t t-snippet="txs_soar.s_picture_txs_soar">
+                        <keywords>separator, divider</keywords>
+                    </t>
+                    <t t-snippet="txs_soar.s_txs_soar_three_columns">
+                        <keywords>separator, divider</keywords>
+                    </t>
+                    <t t-snippet="txs_soar.s_rss_feed">
+                        <keywords>separator, divider</keywords>
+                    </t>
+                </div>
+            </div>
+        </xpath>
+    </template>
+</odoo>

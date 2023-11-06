@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!--    Documents portal view-->
+    <template id="portal_documents_tax_surety" name="Show Documents"
+              inherit_id="portal.portal_my_home" customize_show="True" priority="100">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="title">Documents</t>
+                <t t-set="url" t-value="'/my/documents/'"/>
+                <t t-set="placeholder_count" t-value="'document_count'"/>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="portal_my_home_menu_documents" name="Documents"
+              inherit_id="portal.portal_breadcrumbs" priority="100">
+        <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+            <li t-if="page_name in ['document', 'document_details']"
+                t-attf-class="breadcrumb-item #{'active ' if not document else ''}">
+                <a t-if="document"
+                   t-attf-href="/my/documents?{{ keep_query() }}">Documents
+                </a>
+                <t t-else="">Documents</t>
+            </li>
+            <li t-if="page_name == 'document_details'"
+                class="breadcrumb-item active">
+                <a t-attf-href="/my/documents/{{ document.id }}?{{ keep_query() }}">
+                    <t t-esc="document.name"/>
+                </a>
+            </li>
+        </xpath>
+    </template>
+
+    <!--    Documents List view-->
+
+    <template id="portal_my_documents" name="My Documents">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">My Documents</t>
+            </t>
+            <t t-if="not grouped_documents">
+                <div class="alert alert-warning mt8" role="alert">
+                    There are no documents.
+                </div>
+            </t>
+            <t t-call="taxsurety.portal_document_list"/>
+            <t t-if="groupby == 'workspace'">
+                <t t-foreach="document_folders" t-as="doc_fold">
+                    <table class="table rounded mb-0 bg-white o_portal_my_doc_table">
+                        <thead>
+                            <tr class="table-light">
+
+                                <th class="folder--create-document"
+                                    colspan="7">
+                                    <div class="upload_doc_div">
+                                        <div>
+                                            <span class="text-truncate">
+                                                <t t-esc="doc_fold.name"/>
+                                            </span>
+                                        </div>
+                                        <div>
+                                            <button class="btn btn-primary click_to_upload_doc"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#UploadDocumentFolder"
+                                                    t-att-data-folder-id="doc_fold.id"
+                                                    t-att-data-folder-name="doc_fold.name">
+                                                Upload Document
+                                            </button>
+                                        </div>
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
+                    </table>
+                </t>
+            </t>
+
+            <div class="modal se-modal"
+                 id="UploadDocumentFolder"
+                 tabindex="-1"
+                 role="dialog"
+                 t-att-aria-labelledby="UploadDocumentFolder"
+                 aria-hidden="true">
+
+                <div class="modal-dialog se-modal__dialog"
+                     role="document">
+                    <div class="modal-content se-modal__content">
+                        <div class="modal-header">
+                            <h5 class="modal-title se-modal__title document">
+                            </h5>
+                            <button type="button"
+                                    class="close"
+                                    data-bs-dismiss="modal"
+                                    aria-label="Close">
+                                <span aria-hidden="false">
+                                    X
+                                </span>
+                            </button>
+                        </div>
+                        <div class="modal-body upload--document-modal">
+                            <form class="upload_form submission__form"
+                                  style="display:flex; justify-content: center; flex-direction: column;"
+                                  action="/my/documents/folder/document/upload"
+                                  method="post"
+                                  enctype="multipart/form-data">
+                                <input id="folder_document_id"
+                                       type="hidden"
+                                       name="folder_document_id"
+                                />
+                                <input type="hidden"
+                                       name="csrf_token"
+                                       t-att-value="request.csrf_token()"/>
+                                <div id="click-image-document_folder">
+                                </div>
+                                <div class="mt-5"
+                                     style="display: flex; justify-content: center;">
+                                    <label for="doc_uploader_folder_upload"
+                                           id="label_for_doc_uploader_folder_upload"
+                                           style="display: flex; justify-content: center;">
+                                        <img id="doc_uploaded_folder_upload"
+                                             src="/taxsurety/static/src/images/file-arrow-up-solid.svg"
+                                             style="cursor:pointer; width: 60%; height: 90%"/>
+                                    </label>
+                                    <input id="doc_uploader_folder_upload"
+                                           type="file"
+                                           class="file doc_uploader"
+                                           data-show-upload="true"
+                                           data-show-caption="true"
+                                           data-show-preview="true"
+                                           name="doc_uploaded"
+                                           hidden="true"/>
+                                    <input id="file_name_folder_upload"
+                                           name="file_name"
+                                           type="hidden"/>
+                                    <input type="hidden"
+                                           name="file_type"
+                                           id="file_type_folder_upload"/>
+                                </div>
+                                <input type="submit"
+                                       class="btn btn-primary mt-4"/>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal se-modal"
+                 id="UploadDocumentModal"
+                 tabindex="-1" role="dialog"
+                 t-att-aria-labelledby="UploadDocumentModal"
+                 aria-hidden="true">
+                <div class="modal-dialog se-modal__dialog"
+                     role="document">
+                    <div class="modal-content se-modal__content">
+                        <div class="modal-header">
+                            <h5 class="modal-title se-modal__title">
+                            </h5>
+                            <button type="button"
+                                    class="close"
+                                    data-bs-dismiss="modal"
+                                    aria-label="Close">
+                                <span aria-hidden="false">
+                                    X
+                                </span>
+                            </button>
+                        </div>
+                        <div class="modal-body upload--document-modal">
+                            <form class="upload_form submission__form"
+                                  style="display:flex; justify-content: center; flex-direction: column;"
+                                  action="/my/documents/upload"
+                                  method="post"
+                                  enctype="multipart/form-data">
+                                <input id="document_id"
+                                       type="hidden"
+                                       name="document_id"
+                                />
+                                <input type="hidden"
+                                       name="csrf_token"
+                                       t-att-value="request.csrf_token()"/>
+                                <div id="click-image-document">
+                                </div>
+                                <div class="mt-5"
+                                     style="display: flex; justify-content: center;">
+                                    <label for="doc_uploader_document_upload"
+                                           id="label_for_doc_uploader_document_upload"
+                                           style="display: flex; justify-content: center;">
+                                        <img id="doc_uploaded_document_upload"
+                                             src="/taxsurety/static/src/images/file-arrow-up-solid.svg"
+                                             style="cursor:pointer; width: 60%; height: 90%"/>
+                                    </label>
+                                    <input id="doc_uploader_document_upload"
+                                           type="file"
+                                           class="file doc_uploader"
+                                           data-show-upload="true"
+                                           data-show-caption="true"
+                                           data-show-preview="true"
+                                           name="doc_uploaded"
+                                           hidden="true"/>
+                                    <input id="file_name_document_upload"
+                                           name="file_name"
+                                           type="hidden"/>
+                                    <input type="hidden"
+                                           name="file_type"
+                                           id="file_type_document_upload"/>
+                                </div>
+                                <input type="submit"
+                                       class="btn btn-primary mt-4"/>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--            Create Work space-->
+
+            <div class="create_ws">
+                <button class="btn btn-primary mt-2"
+                        data-bs-toggle="modal"
+                        data-bs-target="#CreateWorkSpace">
+                    Create new Workspace
+                </button>
+            </div>
+            <div class="modal se-modal"
+                 id="CreateWorkSpace"
+                 tabindex="-1" role="dialog"
+                 t-att-aria-labelledby="CreateWorkSpace"
+                 aria-hidden="true">
+                <div class="modal-dialog se-modal__dialog"
+                     role="document">
+                    <div class="modal-content se-modal__content">
+                        <div class="modal-header">
+                            <h5 class="modal-title se-modal__title">
+                                Create Document Workspace
+                            </h5>
+                            <button type="button"
+                                    class="close"
+                                    data-bs-dismiss="modal"
+                                    aria-label="Close">
+                                <span aria-hidden="false">
+                                    X
+                                </span>
+                            </button>
+                        </div>
+                        <div class="modal-body upload--document-modal">
+                            <form class="upload_form submission__form"
+                                  style="display:flex; justify-content: center; flex-direction: column;"
+                                  action="/my/documents/create_workspace"
+                                  method="post"
+                                  enctype="multipart/form-data">
+                                <input type="hidden"
+                                       name="csrf_token"
+                                       t-att-value="request.csrf_token()"/>
+                                <label for="workspace_name">
+                                    Name
+                                </label>
+                                <input type="text"
+                                       id="workspace_name"
+                                       name="workspace_name"
+                                       required="required"/>
+                                <div style="display: contents;">
+                                    <input type="submit"
+                                           class="btn btn-primary mt-4"/>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+
+    <template id="portal_document_list" name="Documents List">
+        <t t-if="grouped_documents">
+            <t t-call="portal.portal_table">
+                <thead>
+                    <tr>
+                        <!-- Allows overrides in modules -->
+                        <t t-set="group_by_in_header_list"
+                           t-value="['workspace', 'owner', 'contact']"></t>
+                        <t t-set="number_of_header" t-value="10"></t>
+                        <!-- Computes the right colspan once and use it everywhere -->
+                        <t t-set="grouped_documents_colspan"
+                           t-value="number_of_header - 1 if groupby in group_by_in_header_list else number_of_header"></t>
+                        <t t-set="grouped_documents_colspan"
+                           t-value="grouped_documents_colspan - 1"></t>
+                        <th t-attf-colspan="{{1}}"/>
+                        <th>Document #</th>
+                        <th>Document Date</th>
+                        <th t-if="groupby != 'owner'">Owner</th>
+                        <th t-if="groupby != 'workspace'">Workspace</th>
+                        <th t-if="groupby != 'contact'">Contact</th>
+                        <th>Download/ Upload</th>
+                    </tr>
+                </thead>
+                <t t-foreach="grouped_documents" t-as="documents">
+                    <tbody t-if="documents">
+                        <tr t-if="not groupby == 'none'" class="table-light">
+                            <th t-if="groupby == 'workspace'"
+                                class="folder--create-document"
+                                t-attf-colspan="{{grouped_documents_colspan - 1}}">
+                                <div class="upload_doc_div">
+                                    <div>
+                                        <span class="text-truncate"
+                                              t-field="documents[0].sudo().folder_id.name"/>
+                                    </div>
+                                    <div>
+                                        <button class="btn btn-primary click_to_upload_doc"
+                                                data-bs-toggle="modal"
+                                                t-att-data-folder-id="documents[0].sudo().folder_id.id"
+                                                t-att-data-folder-name="documents[0].sudo().folder_id.name"
+                                                data-bs-target="#UploadDocumentFolder">
+                                            Upload Document
+                                        </button>
+                                    </div>
+                                </div>
+                            </th>
+                            <th t-if="groupby == 'owner'"
+                                t-attf-colspan="{{grouped_documents_colspan}}">
+                                <span class="text-truncate"
+                                      t-field="documents[0].sudo().owner_id.name"/>
+                            </th>
+                            <th t-if="groupby == 'contact'"
+                                t-attf-colspan="{{grouped_documents_colspan}}">
+                                <span class="text-truncate"
+                                      t-field="documents[0].sudo().partner_id.name"/>
+                            </th>
+                        </tr>
+                    </tbody>
+                    <tbody t-if="documents"
+                           class="table--docs">
+                        <t t-set="slno" t-value="1"/>
+                        <t t-foreach="documents" t-as="document">
+
+                            <tr>
+                                <td class="text-start">
+                                    #
+                                    <span t-esc="slno"/>
+                                </td>
+                                <td>
+                                    <a t-att-href="'/my/documents/%s' %document.id">
+                                        <span t-field="document.name"/>
+                                    </a>
+                                </td>
+                                <td>
+                                    <span t-esc="document.create_date.strftime('%Y-%m-%d - %H:%M:%S')"/>
+                                </td>
+                                <td t-if="groupby != 'owner'">
+                                    <span t-esc="document.owner_id.name"/>
+                                </td>
+                                <td t-if="groupby != 'workspace'">
+                                    <span t-esc="document.folder_id.name"/>
+                                </td>
+                                <td t-if="groupby != 'contact'">
+                                    <span t-esc="document.partner_id.name"/>
+                                </td>
+                                <td>
+                                    <t t-if="document.type == 'binary'">
+                                        <a t-attf-href="/web/taxsurety/#{document.id}?download=true}"
+                                           title="Download File">
+                                            <i class="fa fa-download"/>
+                                            <t t-esc="document.name"
+                                               t-if="document.name != '/'"/>
+                                        </a>
+                                    </t>
+                                    <t t-elif="document.type == 'url'">
+                                        <a t-att-href="document.url"
+                                           t-att-title="'Goto Url : ' + document.url">
+                                            <i class="fa fa-globe"/>
+                                            <t t-esc="document.name"
+                                               t-if="document.name != '/'"/>
+                                        </a>
+                                    </t>
+                                    <t t-elif="document.type == 'empty'">
+                                        <a data-bs-toggle="modal"
+                                           class="upload-doc"
+                                           t-att-data-document-id="document.id"
+                                           t-att-title="'Upload document for ' + document.name"
+                                           t-att-data-document-name="document.name"
+                                           data-bs-target="#UploadDocumentModal">
+                                            <i class="fa fa-upload"/>
+                                            <t t-esc="document.name"
+                                               t-if="document.name != '/'"/>
+                                        </a>
+                                    </t>
+                                </td>
+                                <t t-set="slno" t-value="slno+1"/>
+                            </tr>
+                        </t>
+                    </tbody>
+                </t>
+            </t>
+
+        </t>
+    </template>
+
+</odoo>

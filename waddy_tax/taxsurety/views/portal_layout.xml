@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="taxsurety_loader" inherit_id="portal.portal_layout">
+        <xpath expr="//div[@id='wrap']" position="inside">
+            <div id="loader__container">
+                <div id="loader">
+
+                </div>
+            </div>
+        </xpath>
+    </template>
+</odoo>
