@@ -2,7 +2,8 @@
 <odoo>
     <!--    Documents portal view-->
     <template id="portal_documents_tax_surety" name="Show Documents"
-              inherit_id="portal.portal_my_home" customize_show="True" priority="100">
+              inherit_id="portal.portal_my_home" customize_show="True"
+              priority="100">
         <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
             <t t-call="portal.portal_docs_entry">
                 <t t-set="title">Documents</t>
@@ -61,6 +62,12 @@
                                             </span>
                                         </div>
                                         <div>
+                                            <i class="edit_document fa fa-edit"
+                                               data-bs-toggle="modal"
+                                               t-att-data-folder-id="doc_fold.id"
+                                               t-att-data-folder-name="doc_fold.name"
+                                               data-bs-target="#EditDocumentFolder"
+                                               style="margin-right: 20px;"/>
                                             <button class="btn btn-primary click_to_upload_doc"
                                                     data-bs-toggle="modal"
                                                     data-bs-target="#UploadDocumentFolder"
@@ -147,6 +154,66 @@
                 </div>
             </div>
 
+
+            <!--EDIT DOCUMENT WORKSPACE-->
+
+            <div class="modal se-modal"
+                 id="EditDocumentFolder"
+                 tabindex="-1"
+                 role="dialog"
+                 t-att-aria-labelledby="EditDocumentFolder"
+                 aria-hidden="true">
+
+                <div class="modal-dialog se-modal__dialog"
+                     role="document">
+                    <div class="modal-content se-modal__content">
+                        <div class="modal-header">
+                            <h5 class="modal-title se-modal__title document">
+                                Edit Workspace Name
+                            </h5>
+                            <button type="button"
+                                    class="close"
+                                    data-bs-dismiss="modal"
+                                    aria-label="Close">
+                                <span aria-hidden="false">
+                                    X
+                                </span>
+                            </button>
+                        </div>
+                        <div class="modal-body upload--document-modal">
+                            <form class="upload_form submission__form"
+                                  style="display:flex; justify-content: center; flex-direction: column;"
+                                  action="/my/documents/folder/edit"
+                                  method="post"
+                                  enctype="multipart/form-data">
+                                <input id="workspace_id"
+                                       type="hidden"
+                                       name="workspace_id"
+                                />
+                                <input type="hidden"
+                                       name="csrf_token"
+                                       t-att-value="request.csrf_token()"/>
+
+                                <label for="workspace_name">
+                                    Name
+                                </label>
+                                <input type="text"
+                                       id="workspace_name"
+                                       name="workspace_name"
+                                       required="required"/>
+                                <div style="display: contents;">
+                                    <input type="submit"
+                                           class="btn btn-primary mt-4"/>
+                                </div>
+
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
             <div class="modal se-modal"
                  id="UploadDocumentModal"
                  tabindex="-1" role="dialog"
@@ -224,6 +291,7 @@
                     Create new Workspace
                 </button>
             </div>
+
             <div class="modal se-modal"
                  id="CreateWorkSpace"
                  tabindex="-1" role="dialog"
@@ -309,6 +377,12 @@
                                               t-field="documents[0].sudo().folder_id.name"/>
                                     </div>
                                     <div>
+                                        <i class="edit_document fa fa-edit"
+                                           data-bs-toggle="modal"
+                                           t-att-data-folder-id="documents[0].sudo().folder_id.id"
+                                           t-att-data-folder-name="documents[0].sudo().folder_id.name"
+                                           data-bs-target="#EditDocumentFolder"
+                                           style="margin-right: 20px;"/>
                                         <button class="btn btn-primary click_to_upload_doc"
                                                 data-bs-toggle="modal"
                                                 t-att-data-folder-id="documents[0].sudo().folder_id.id"

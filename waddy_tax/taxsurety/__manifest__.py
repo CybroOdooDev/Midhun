@@ -20,12 +20,14 @@
         'views/portal_layout.xml',
         'views/templates.xml',
         'views/website_views.xml',
+        'views/portal_updates.xml',
         'wizards/import_excel_views.xml',
     ],
     'assets': {
         'web.assets_frontend': [
             'taxsurety/static/src/css/taxsurety.css',
             'taxsurety/static/src/js/portal_composer.js',
+            'taxsurety/static/src/js/portal_updates.js',
             'taxsurety/static/src/js/document_uploader.js',
             'taxsurety/static/src/js/document_create_portal.js',
         ]

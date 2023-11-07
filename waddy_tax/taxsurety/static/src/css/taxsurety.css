@@ -68,3 +68,7 @@ a.list-group-item.list-group-item-action.d-flex.align-items-center.justify-conte
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
+i.edit_document:hover {
+    cursor: pointer;
+}

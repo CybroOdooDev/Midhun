@@ -144,3 +144,16 @@ class TaxSuretyDownloader(http.Controller):
             document.message_post(body=body, message_type='email',
                                   partner_ids=document.message_follower_ids.partner_id.ids)
             return request.redirect('/my/documents/')
+
+    @http.route(['/my/documents/folder/edit'], type='http',
+                auth="user", website=True, csrf=False)
+    def documents_edit_workspace(self, **post):
+        if post.get('workspace_id'):
+            workspace = request.env['documents.folder'].sudo().browse(
+                int(post.get('workspace_id')))
+            workspace.write({
+                'name': post.get('workspace_name'),
+            })
+        return request.redirect('/my/documents')
+
+

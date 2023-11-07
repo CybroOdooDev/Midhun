@@ -10,8 +10,16 @@ odoo.define('taxsurety.document_uploader', function(require) {
             'change #doc_uploader_folder_upload': '_onFileChangeFolder',
             'change #doc_uploader_details': '_onFileChangeDetails',
             'click .click_to_upload_doc': '_onUploadDocumentFile',
+            'click .edit_document': '_onEditWorkspace',
             'submit .submission__form': '_onSubmitLoader',
             },
+
+        _onEditWorkspace: function (event) {
+            var workspace_name = this.$el.find('#EditDocumentFolder input#workspace_name');
+            var workspace_id = this.$el.find('#EditDocumentFolder input#workspace_id');
+            workspace_name.val(event.currentTarget.getAttribute('data-folder-name'));
+            workspace_id.val(event.currentTarget.getAttribute('data-folder-id'));
+        },
 
         _onUploadDoc: function (event) {
             var heading = this.$el.find('div.modal-header h5')
