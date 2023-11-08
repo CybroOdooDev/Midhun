@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': "Taxsurety",
-    'version': '16.0.1.0.0',
+    'version': '16.0.1.1.2',
     'category': 'Accounting',
     'summary': """Taxsurety custom module.""",
     'description': """Taxsurety custom module.""",
@@ -21,6 +21,7 @@
         'views/templates.xml',
         'views/website_views.xml',
         'views/portal_updates.xml',
+        'views/res_partner_views.xml',
         'wizards/import_excel_views.xml',
     ],
     'assets': {

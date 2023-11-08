@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_partner_form"
+            model="ir.ui.view">
+        <field name="name">view.partner.form.inherit.taxsurety</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='category_id']"
+                   position="after">
+                <field name="etp_q1"/>
+                <field name="etp_q2"/>
+                <field name="etp_q3"/>
+                <field name="etp_q4"/>
+                <field name="est_savings"/>
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page name="bank_information" string="Bank Information">
+                    <group name="container_row_2">
+                        <group string="Bank information"
+                               name="bank_info">
+                            <field name="bank_name"/>
+                            <field name="bank_accnt_no"/>
+                            <field name="routing_no"/>
+                        </group>
+                        <group string="Credit card information"
+                               name="cc_info">
+                            <field name="cc_name"/>
+                            <field name="cc_no"/>
+                            <field name="cc_code"/>
+                            <field name="cc_exp_date_month"/>
+                            <field name="cc_exp_date_year"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>
