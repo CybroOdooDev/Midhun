@@ -8,6 +8,7 @@
             <xpath expr="//field[@name='language_ids']" position="after">
                 <field name="is_shop_disabled"/>
                 <field name="is_signup_disabled"/>
+                <field name="is_customer_downpayment_enabled"/>
             </xpath>
         </field>
     </record>

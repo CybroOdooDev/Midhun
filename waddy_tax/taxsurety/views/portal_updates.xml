@@ -8,43 +8,43 @@
                     <h3>Estimated Tax Payments</h3>
                     <div>
                         <t t-if="user_id.etp_q1 != '0' and user_id.etp_q1 != False">
-                            <a class="list-group-item list-group-item-action d-flex align-items-center justify-content-between"
+                            <a class="list-group-item list-group-item-action d-flex align-items-center justify-content-between modal-opener"
                                data-bs-toggle="modal"
                                title="Click to update Q1 Tax Payments"
                                data-bs-target="#UpdateContactFolders"
-                               data-h5="Q1"
+                               data-h5="Q1 Tax Payments"
                                data-field_name="etp_q1">
                                 <b>Q1:</b>
                                 <t t-out="user_id.etp_q1"/>
                             </a>
                         </t>
                         <t t-if="user_id.etp_q2 != '0' and user_id.etp_q2 != False">
-                            <a class="list-group-item list-group-item-action d-flex align-items-center justify-content-between"
+                            <a class="list-group-item list-group-item-action d-flex align-items-center justify-content-between modal-opener"
                                data-bs-toggle="modal"
                                title="Click to update Q2 Tax Payments"
                                data-field_name="etp_q2"
-                               data-h5="Q2"
+                               data-h5="Q2 Tax Payments"
                                data-bs-target="#UpdateContactFolders">
                                 <b>Q2:</b>
                                 <t t-out="user_id.etp_q2"/>
                             </a>
                         </t>
                         <t t-if="user_id.etp_q3 != '0' and user_id.etp_q3 != False">
-                            <a class="list-group-item list-group-item-action d-flex align-items-center justify-content-between"
+                            <a class="list-group-item list-group-item-action d-flex align-items-center justify-content-between modal-opener"
                                title="Click to update Q3 Tax Payments"
                                data-bs-toggle="modal"
                                data-field_name="etp_q3"
-                               data-h5="Q3"
+                               data-h5="Q3 Tax Payments"
                                data-bs-target="#UpdateContactFolders">
                                 <b>Q3:</b>
                                 <t t-out="user_id.etp_q3"/>
                             </a>
                         </t>
                         <t t-if="user_id.etp_q4 != '0' and user_id.etp_q4 != False">
-                            <a class="list-group-item list-group-item-action d-flex align-items-center justify-content-between"
+                            <a class="list-group-item list-group-item-action d-flex align-items-center justify-content-between modal-opener"
                                title="Click to update Q4 Tax Payments"
                                data-field_name="etp_q4"
-                               data-h5="Q4"
+                               data-h5="Q4 Tax Payments"
                                data-bs-toggle="modal"
                                data-bs-target="#UpdateContactFolders">
                                 <b>Q4:</b>
@@ -66,7 +66,7 @@
             <t>
                 <div class="mt-4">
                     <h3>Bank information</h3>
-                    <a class="list-group-item list-group-item-action d-flex align-items-center justify-content-between"
+                    <a class="list-group-item list-group-item-action d-flex align-items-center justify-content-between modal-opener"
                         data-field_name="bank_name"
                         data-bs-toggle="modal"
                         data-bs-target="#UpdateOthers"
@@ -74,7 +74,7 @@
                         <b>Bank name</b>
                         <t t-out="user_id.bank_name"/>
                     </a>
-                    <a class="list-group-item list-group-item-action d-flex align-items-center justify-content-between"
+                    <a class="list-group-item list-group-item-action d-flex align-items-center justify-content-between modal-opener"
                         data-field_name="bank_accnt_no"
                         data-bs-toggle="modal"
                         data-bs-target="#UpdateOthers"
@@ -82,7 +82,7 @@
                         <b>Bank account no.</b>
                         <t t-out="'X'*(len(user_id.bank_accnt_no) - 4) + user_id.bank_accnt_no[-4:] if user_id.bank_accnt_no and len(user_id.bank_accnt_no) > 4 else user_id.bank_accnt_no"/>
                     </a>
-                    <a class="list-group-item list-group-item-action d-flex align-items-center justify-content-between"
+                    <a class="list-group-item list-group-item-action d-flex align-items-center justify-content-between modal-opener"
                         data-field_name="routing_no"
                         data-bs-toggle="modal"
                         data-bs-target="#UpdateOthers"
@@ -95,7 +95,7 @@
             <t>
                 <div class="mt-4">
                     <h3>Credit card information</h3>
-                    <a class="list-group-item list-group-item-action d-flex align-items-center justify-content-between"
+                    <a class="list-group-item list-group-item-action d-flex align-items-center justify-content-between modal-opener"
                         data-field_name="cc_name"
                         data-bs-toggle="modal"
                         data-bs-target="#UpdateOthers"
@@ -103,7 +103,7 @@
                         <b>Credit card name</b>
                         <t t-out="user_id.cc_name"/>
                     </a>
-                    <a class="list-group-item list-group-item-action d-flex align-items-center justify-content-between"
+                    <a class="list-group-item list-group-item-action d-flex align-items-center justify-content-between modal-opener"
                         data-field_name="cc_no"
                         data-bs-toggle="modal"
                         data-bs-target="#UpdateOthers"
@@ -111,7 +111,7 @@
                         <b>Credit card no.</b>
                         <t t-out="'X'*(len(user_id.cc_no) - 4) + user_id.cc_no[-4:] if user_id.cc_no and len(user_id.cc_no) > 4 else user_id.cc_no"/>
                     </a>
-                    <a class="list-group-item list-group-item-action d-flex align-items-center justify-content-between"
+                    <a class="list-group-item list-group-item-action d-flex align-items-center justify-content-between modal-opener"
                         data-field_name="cc_code"
                         data-bs-toggle="modal"
                         data-bs-target="#UpdateOthers"
@@ -119,8 +119,9 @@
                         <b>Security code</b>
                         <t t-out="user_id.cc_code"/>
                     </a>
-                    <a class="list-group-item list-group-item-action d-flex align-items-center justify-content-between"
+                    <a class="list-group-item list-group-item-action d-flex align-items-center justify-content-between modal-opener"
                         data-bs-toggle="modal"
+                        title="Update Expiration Date"
                         data-bs-target="#UpdateExpiration">
                         <b>Expiration date</b>
                         <t t-out="user_id.cc_exp_date_month"/> / <t t-out="user_id.cc_exp_date_year"/>
@@ -283,7 +284,42 @@
                     </div>
                 </div>
             </div>
+        </xpath>
+    </template>
 
+    <template id="taxsurety_details_updates" inherit_id="portal.portal_layout">
+        <xpath expr="//div[@id='wrap']//div[hasclass('o_my_sidebar')]" position="inside">
+            <div class="mt-4">
+                <h3>Tax Return Results</h3>
+                <div>
+                    <t t-if="user_id.federal_return_results">
+                        <a class="list-group-item list-group-item-action d-flex align-items-center justify-content-between modal-opener"
+                           data-bs-toggle="modal"
+                           title="Click to update Federal return results"
+                           data-bs-target="#UpdateContactFolders"
+                           data-h5="Federal Return Results"
+                           data-field_name="federal_return_results">
+                            <b>Federal Return Results:</b>
+                        </a>
+                        <div class="px-3 py-2">
+                            <t t-out="user_id.federal_return_results"/>
+                        </div>
+                    </t>
+                    <t t-if="user_id.state_return_results">
+                        <a class="list-group-item list-group-item-action d-flex align-items-center justify-content-between modal-opener"
+                           data-bs-toggle="modal"
+                           title="Click to update State return results"
+                           data-bs-target="#UpdateContactFolders"
+                           data-h5="State Return Results"
+                           data-field_name="state_return_results">
+                            <b>State Return Results:</b>
+                        </a>
+                        <div class="px-3 py-2">
+                            <t t-out="user_id.state_return_results"/>
+                        </div>
+                    </t>
+                </div>
+            </div>
         </xpath>
     </template>
 </odoo>

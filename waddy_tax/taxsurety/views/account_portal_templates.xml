@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template name="Portal Invoice Page Taxsurety"
+              id="portal_invoice_page_taxsurety"
+              inherit_id="account.portal_invoice_page">
+        <xpath expr="//div[hasclass('o_download_pdf')]" position="after">
+            <t t-if="website.is_customer_downpayment_enabled">
+                <t t-if="invoice.state == 'posted' and invoice.payment_state in ('not_paid', 'partial') and invoice.amount_total and invoice.move_type == 'out_invoice' and (pending_manual_txs or not tx_ids or invoice.amount_paid &lt; invoice.amount_total)">
+                    <div class="downpayment">
+                            <div class="downpayment_container pt4"
+                                 style="display: flex; justify-content: space-between;">
+                                <div class="downpayment--text pt4">
+                                    Down-payment
+                                </div>
+                                <input type="checkbox"
+                                       id="downpayment_check"
+                                       class="form-check-input"
+                                       name="downpayment_check"/>
+                            </div>
+                            <div class="price_display d-none pt16">
+                                <div class="pay-now  d-flex">
+                                    <span style="font-weight: bold;">
+                                        <t t-esc="website.company_id.currency_id.symbol"/>
+                                    </span>
+                                    <input id="price_display_input"
+                                           style="width: 90%;"
+                                           type="number"
+                                           step="0.01"/>
+                                </div>
+                                <div class="pay-now-button pt16">
+                                    <a href="#"
+                                       class="btn btn-primary mb-2"
+                                       data-bs-toggle="modal"
+                                       data-bs-target="#pay_with"
+                                       style="display: flow;">
+                                        <i class="fa fa-fw fa-arrow-circle-right"></i>
+                                        Pay Now
+                                    </a>
+                                </div>
+
+
+                            </div>
+
+                        </div>
+                </t>
+            </t>
+        </xpath>
+    </template>
+
+<!--    <template id="portal_checkout_taxsurety" name="Payment Checkout"-->
+<!--              inherit_id="payment.checkout">-->
+<!--        <xpath expr="//form[@name='o_payment_checkout']" position="attributes">-->
+<!--            This is what you need to change-->
+<!--            <attribute name="t-att-data-amount">10.0</attribute>-->
+<!--        </xpath>-->
+<!--    </template>-->
+
+</odoo>

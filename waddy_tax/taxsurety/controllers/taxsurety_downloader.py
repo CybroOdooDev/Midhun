@@ -1,4 +1,25 @@
 # -*- coding: utf-8 -*-
+######################################################################################
+#
+#    Waddy Accounting Services
+#
+#    Copyright (C) 2021-TODAY Cybrosys Technologies(<https://www.cybrosys.com>).
+#    Author: Waddy Accounting Services
+#
+#    This program is under the terms of the Odoo Proprietary License v1.0 (OPL-1)
+#    It is forbidden to publish, distribute, sublicense, or sell copies of the Software
+#    or modified copies of the Software.
+#
+#    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+#    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+#    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+#    IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+#    DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+#    ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+#    DEALINGS IN THE SOFTWARE.
+#
+########################################################################################
+
 import base64
 from odoo import http, _
 from odoo.http import request
@@ -31,7 +52,9 @@ class TaxSuretyDownloader(http.Controller):
             attachment = document.attachment_id
             attachment.public = True
             body = _('%s downloaded the document.', user.name)
-            document.message_post(body=body, message_type='email',
+            document.message_post(subject=_('Document downloaded by %s', user.name),
+                                  body=body,
+                                  message_type='email',
                                   partner_ids=document.message_follower_ids.partner_id.ids)
             return request.redirect('/web/content/%s?download=true' % (
                 attachment.id))
@@ -61,7 +84,8 @@ class TaxSuretyDownloader(http.Controller):
                 'taxsurety.group_taxsurety_tax_administrators').sudo().users.partner_id.ids
             document.attachment_id = attachment.id
             body = _('%s uploaded the document.', request.env.user.name)
-            document.message_post(body=body, message_type='email',
+            document.message_post(subject=_('Document uploaded by %s', request.env.user.name),
+                                  body=body, message_type='email',
                                   partner_ids=partners)
         return request.redirect('/my/documents')
 
@@ -110,7 +134,8 @@ class TaxSuretyDownloader(http.Controller):
             folder.message_subscribe(
                 partner_ids=partners)
             body = _('%s created a workspace.', request.env.user.name)
-            folder.message_post(body=body, message_type='email',
+            folder.message_post(subject=_('Workspace created by %s', request.env.user.name),
+                                body=body, message_type='email',
                                 partner_ids=partners)
         return request.redirect('/my/documents/')
 
@@ -141,7 +166,8 @@ class TaxSuretyDownloader(http.Controller):
             document.message_subscribe(
                 partner_ids=partners)
             body = _('%s uploaded a document.', request.env.user.name)
-            document.message_post(body=body, message_type='email',
+            document.message_post(subject=_('Document uploaded by %s', request.env.user.name),
+                                  body=body, message_type='email',
                                   partner_ids=document.message_follower_ids.partner_id.ids)
             return request.redirect('/my/documents/')
 
@@ -154,6 +180,10 @@ class TaxSuretyDownloader(http.Controller):
             workspace.write({
                 'name': post.get('workspace_name'),
             })
+            body = _('%s renamed the workspace.', request.env.user.name)
+            workspace.message_post(
+                body=body,
+                partner_ids=workspace.message_follower_ids.partner_id.ids)
         return request.redirect('/my/documents')
 
 

@@ -72,3 +72,26 @@ a.list-group-item.list-group-item-action.d-flex.align-items-center.justify-conte
 i.edit_document:hover {
     cursor: pointer;
 }
+.modal-opener:hover {
+    cursor: pointer;
+}
+#downpayment_check {
+    border-radius: 3px;
+    width: 25px;
+    height: 25px;
+}
+
+.price_display .pay-now{
+    justify-content: space-between;
+}
+
+#price_display_input::-webkit-outer-spin-button,
+#price_display_input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+#price_display_input {
+  -moz-appearance: textfield;
+}

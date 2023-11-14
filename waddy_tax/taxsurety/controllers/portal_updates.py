@@ -1,4 +1,25 @@
 # -*- coding: utf-8 -*-
+######################################################################################
+#
+#    Waddy Accounting Services
+#
+#    Copyright (C) 2021-TODAY Cybrosys Technologies(<https://www.cybrosys.com>).
+#    Author: Waddy Accounting Services
+#
+#    This program is under the terms of the Odoo Proprietary License v1.0 (OPL-1)
+#    It is forbidden to publish, distribute, sublicense, or sell copies of the Software
+#    or modified copies of the Software.
+#
+#    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+#    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+#    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+#    IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+#    DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+#    ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+#    DEALINGS IN THE SOFTWARE.
+#
+########################################################################################
+
 from odoo import http, _
 from odoo.http import request
 
@@ -8,10 +29,16 @@ class PortalUpdates(http.Controller):
                 auth="user", website=True, csrf=False)
     def contacts_update(self, **post):
         if post.get('field_name') and post.get('description'):
+            partner = request.env.user.partner_id
             body = _('Update for ' + post.get(
                 'field_name') + ': ' + post.get(
                 'description'))
-            request.env.user.partner_id.message_post(body=body)
+            partners = request.env.ref(
+                'taxsurety.group_taxsurety_tax_administrators').sudo().users.partner_id.ids
+            partner.with_context(
+                mail_create_nosubscribe=True).message_post(subject=_(
+                    'Update for ' + post.get('field_name') + ' of ' + partner.name),
+                body=body, message_type='email', partner_ids=partners)
         return request.redirect('/my/home')
 
     @http.route(['/my/contacts/bank_and_cc_update'], type='http',
