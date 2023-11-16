@@ -6,53 +6,91 @@
         <xpath expr="//div[hasclass('o_download_pdf')]" position="after">
             <t t-if="website.is_customer_downpayment_enabled">
                 <t t-if="invoice.state == 'posted' and invoice.payment_state in ('not_paid', 'partial') and invoice.amount_total and invoice.move_type == 'out_invoice' and (pending_manual_txs or not tx_ids or invoice.amount_paid &lt; invoice.amount_total)">
-                    <div class="downpayment">
-                            <div class="downpayment_container pt4"
-                                 style="display: flex; justify-content: space-between;">
-                                <div class="downpayment--text pt4">
-                                    Down-payment
-                                </div>
-                                <input type="checkbox"
-                                       id="downpayment_check"
-                                       class="form-check-input"
-                                       name="downpayment_check"/>
+                    <hr/>
+                    <form t-att-action="'/downpayment%s' %invoice.get_portal_url()"
+                      method="post"
+                      id="downpayment_form"
+                      enctype="multipart/form-data">
+                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                        <div class="downpayment_container"
+                             style="display: flex; justify-content: center;">
+                            <div class="downpayment--text">
+                                <h5>
+                                    Down payment
+                                </h5>
                             </div>
-                            <div class="price_display d-none pt16">
-                                <div class="pay-now  d-flex">
-                                    <span style="font-weight: bold;">
-                                        <t t-esc="website.company_id.currency_id.symbol"/>
-                                    </span>
-                                    <input id="price_display_input"
-                                           style="width: 90%;"
-                                           type="number"
-                                           step="0.01"/>
-                                </div>
-                                <div class="pay-now-button pt16">
-                                    <a href="#"
-                                       class="btn btn-primary mb-2"
-                                       data-bs-toggle="modal"
-                                       data-bs-target="#pay_with"
-                                       style="display: flow;">
-                                        <i class="fa fa-fw fa-arrow-circle-right"></i>
-                                        Pay Now
-                                    </a>
-                                </div>
-
-
-                            </div>
-
                         </div>
+                        <div class="price_display pt4">
+                            <div class="pay-now  d-flex">
+                                <span style="font-weight: bold;">
+                                    <t t-esc="website.company_id.currency_id.symbol"/>
+                                </span>
+                                <input id="price_display_input"
+                                       t-att-value="invoice.down_payment_amount if invoice.down_payment_amount else '0.00'"
+                                       style="width: 90%; text-align: right;"
+                                       name="down_payment_amount"
+                                       t-att-readonly="invoice.is_downpayment"
+                                       type="number"
+                                       value="0.00"
+                                       step="0.01"/>
+                            </div>
+                            <div class="pay-now-button pt16">
+                                <button t-if="not invoice.is_downpayment"
+                                   type="submit"
+                                   class="btn btn-primary mb-2"
+                                    name="is_down_payment"
+                                    value="True"
+                                   style="display: flow; width: 100%;">
+                                    <i class="fa fa-fw fa-arrow-circle-right"/>
+                                    Initiate Down Payment
+                                </button>
+                                <button t-else=""
+                                   type="submit"
+                                    name="is_down_payment"
+                                    value="False"
+                                   class="btn btn-danger mb-2"
+                                   style="display: flow; width: 100%;">
+                                    <i class="fa fa-fw fa-times-circle-o"/>
+                                    Cancel Down Payment
+                                </button>
+                            </div>
+                        </div>
+                    </form>
                 </t>
             </t>
         </xpath>
-    </template>
 
-<!--    <template id="portal_checkout_taxsurety" name="Payment Checkout"-->
-<!--              inherit_id="payment.checkout">-->
-<!--        <xpath expr="//form[@name='o_payment_checkout']" position="attributes">-->
-<!--            This is what you need to change-->
-<!--            <attribute name="t-att-data-amount">10.0</attribute>-->
-<!--        </xpath>-->
-<!--    </template>-->
+        <xpath expr="//t[@t-set='title']" position="replace">
+            <t t-set="title"
+               t-if="not invoice.is_downpayment">
+                <h2 class="mb-0">
+                    <b t-if="invoice.amount_residual > 0" t-field="invoice.amount_residual"/>
+                    <b t-else="1" t-field="invoice.amount_total"/>
+                </h2>
+                <div class="small" t-if="invoice.payment_state not in ('paid', 'in_payment') and invoice.move_type == 'out_invoice'"><i class="fa fa-clock-o"/><span class="o_portal_sidebar_timeago ml4" t-att-datetime="invoice.invoice_date_due"/></div>
+            </t>
+
+            <t t-set="title" t-else="">
+                <t t-if="invoice.payment_state not in ('paid', 'in_payment') and invoice.move_type == 'out_invoice'">
+                    <div class="small">
+                        Down payment initiated for <t t-esc="website.company_id.currency_id.symbol"/>  <t t-esc="invoice.down_payment_amount"/>
+                    </div>
+                    <div class="small">
+                        To pay in full, cancel Down Payment
+                    </div>
+                    <div class="small">
+                        Total amount:
+                    </div>
+                </t>
+                <h2 class="mb-0">
+                    <b t-if="invoice.amount_residual > 0" t-field="invoice.amount_residual"/>
+                    <b t-else="1" t-field="invoice.amount_total"/>
+                </h2>
+                <div class="small" t-if="invoice.payment_state not in ('paid', 'in_payment') and invoice.move_type == 'out_invoice'"><i class="fa fa-clock-o"/><span class="o_portal_sidebar_timeago ml4" t-att-datetime="invoice.invoice_date_due"/></div>
+            </t>
+
+        </xpath>
+
+    </template>
 
 </odoo>

@@ -29,6 +29,15 @@ from odoo.addons.portal.controllers.mail import PortalChatter
 
 
 def _check_special_access(res_model, res_id, token='', _hash='', pid=False):
+    """
+    Check access to model and record.
+    :param res_model:
+    :param res_id:
+    :param token:
+    :param _hash:
+    :param pid:
+    :return:
+    """
     record = request.env[res_model].browse(res_id).sudo()
     if _hash and pid:  # Signed Token Case: hash implies token is signed by partner pid
         return consteq(_hash, record._sign_token(pid))
@@ -123,7 +132,8 @@ class TaxsuretyPortalChatter(PortalChatter):
     @http.route()
     def portal_chatter_post(self, res_model, res_id, message,
                             attachment_ids=None, attachment_tokens=None, **kw):
-        """Create a new `mail.message` with the given `message` and/or `attachment_ids` and return new message values.
+        """Create a new `mail.message` with the given `message` and/or
+        `attachment_ids` and return new message values.
 
         The message will be associated to the record `res_id` of the model
         `res_model`. The user must have access rights on this target document or

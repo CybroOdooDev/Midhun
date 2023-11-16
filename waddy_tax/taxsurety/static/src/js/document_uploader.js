@@ -264,7 +264,6 @@ odoo.define('taxsurety.document_uploader', function(require) {
                 }
             }
         },
-
         _onSubmitLoader: function () {
             this.$el.find('#loader__container').show();
         },

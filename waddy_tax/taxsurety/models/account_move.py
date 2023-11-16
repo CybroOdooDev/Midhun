@@ -20,10 +20,13 @@
 #
 ########################################################################################
 
-from . import main
-from . import mail
-from . import portal_updates
-from . import account_portal
-from . import shop
-from . import signup
-from . import taxsurety_downloader
+from odoo import fields, models
+
+
+class AccountMove(models.Model):
+    _inherit = 'account.move'
+
+    is_downpayment = fields.Boolean(string="Downpayment enabled",
+                                    default=False)
+    down_payment_amount = fields.Float(string="Downpayment amount",
+                                       default=0.00)
