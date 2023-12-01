@@ -19,12 +19,22 @@
 #    DEALINGS IN THE SOFTWARE.
 #
 ########################################################################################
-
-from odoo import fields, models, _
+import re
+from odoo import api, fields, models, _
 
 
 class ResPartner(models.Model):
     _inherit = 'res.partner'
+    """
+    Adding fields for taxsurety
+    """
+
+    first_name = fields.Char(string="First Name",
+                             help="First name",
+                             )
+    last_name = fields.Char(string="Last Name",
+                            help="Last name",
+                            )
 
     etp_q1 = fields.Char(string="Q1",
                          help="Estimated Tax Payment Q1",
@@ -86,12 +96,41 @@ class ResPartner(models.Model):
                                        help="State return results",
                                        tracking=True)
 
-    def action_update_contacts_through_excel(self):
-        return {
-            'name': _("Import Contact"),
-            'view_mode': 'form',
-            'view_type': 'form',
-            'res_model': 'partner.matching.wizard',
-            'type': 'ir.actions.act_window',
-            'target': 'new',
-        }
+    @api.model
+    def message_new(self, msg, custom_values=None):
+        """ Overrides mail_thread message_new that is called by the mailgateway
+            through message_process.
+            This override updates the document according to the email.
+        """
+
+        # if msg.get('subject') == 'Favorable Introduction':
+        #     if msg.get('recipients'):
+        #         emails = re.findall(r"[a-z0-9\.\-+_]+@[a-z0-9\.\-+_]+\.[a-z]+", msg.get('recipients'))
+        #         for rec in emails:
+        #             if not self.search([('email', '=', rec)]):
+        #                 contact = self.create({
+        #                     'name': rec,
+        #                     'email': rec
+        #                 })
+        #                 contact.with_context(mail_create_nosubscribe=True).message_post(
+        #                     subject=_(msg.get('subject')),
+        #                     body=_('Contact created from email.' + msg.get('body')),
+        #                     message_type='comment')
+        result = super(ResPartner, self).message_new(msg, custom_values=custom_values)
+        if msg.get('subject') == 'Favorable Introduction':
+            if msg.get('recipients'):
+                emails = re.findall(r"[a-z0-9\.\-+_]+@[a-z0-9\.\-+_]+\.[a-z]+", msg.get('recipients'))
+                for rec in emails[:1]:
+                    if not self.search([('email', '=', rec)]):
+                        result.write({
+                            'name': rec,
+                            'email': rec,
+                        })
+                for rec in emails[1:]:
+                    if not self.search([('email', '=', rec)]):
+                        contact = result.copy()
+                        contact.write({
+                            'name': rec,
+                            'email': rec,
+                        })
+        return result

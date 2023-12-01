@@ -99,7 +99,7 @@ class TaxSuretyDownloader(http.Controller):
                     ('name', '=', 'Tax Preparation Customers')], limit=1)
             user_folder = request.env['documents.folder'].sudo().search([
                 ('name', '=', request.env.user.name),
-                ('parent_folder_id.name', '=', request.env.user.name.split()[-1][0])
+                ('parent_folder_id.name', '=', request.env.user.name.split()[-1][0].upper())
             ], limit=1)
             if not user_folder:
                 last_name_alphabet_folder = request.env['documents.folder'].sudo().search([

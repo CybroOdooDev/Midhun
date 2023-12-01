@@ -22,7 +22,7 @@
 
 {
     'name': "Taxsurety",
-    'version': '16.0.1.1.4',
+    'version': '16.0.1.1.6',
     'category': 'Accounting',
     'summary': """Taxsurety custom module.""",
     'description': """Taxsurety custom module.""",
@@ -32,9 +32,8 @@
                 'website_sale'],
     'data': [
         'security/group_taxsurety.xml',
-        'security/ir.model.access.csv',
         'data/document_mail_template.xml',
-        'data/server_action.xml',
+        'data/missing_document_email_template.xml',
         'views/documents_folder_views.xml',
         'views/portal_views.xml',
         'views/document_details.xml',
@@ -44,7 +43,8 @@
         'views/portal_updates.xml',
         'views/res_partner_views.xml',
         'views/account_portal_templates.xml',
-        'wizards/import_excel_views.xml',
+        'views/sale_portal_templates.xml',
+        'views/survey_poweredby.xml',
     ],
     'assets': {
         'web.assets_frontend': [

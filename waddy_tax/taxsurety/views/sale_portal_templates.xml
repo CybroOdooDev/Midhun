@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="taxsurety_so_inherit"
+              name="Taxsurety Sale Order Portal"
+              inherit_id="sale.sale_order_portal_template">
+        <xpath expr="//div[@role='status']"
+               position="replace">
+            <t t-if="website.is_customer_downpayment_enabled">
+                <div t-if="message == 'sign_ok'"
+                     class="alert alert-success alert-dismissible d-print-none"
+                     role="status">
+                    <button type="button" class="btn-close"
+                            data-bs-dismiss="alert" aria-label="Close"/>
+                    <strong>Thank You!</strong>
+                    <br/>
+                    <t t-if="message == 'sign_ok' and sale_order.state in ['sale', 'done']">
+                        Your order has been confirmed.
+                        <t t-if="sale_order.invoice_ids">
+                            <a style="color:red;"
+                               t-att-href="sale_order.invoice_ids[0].preview_invoice().get('url')">
+                                Please click here to proceed to payment.
+                            </a>
+                        </t>
+                        <t t-set="user_exists"
+                           t-value="request.env['res.users'].sudo().search([('login', '=', sale_order.partner_id.email)], limit=1)"/>
+                        <t t-if="user_exists and user_exists.state == 'new'">
+                            <div>
+                                An account has been created for you with the
+                                following login:<t
+                                    t-esc="sale_order.partner_id.email"/>.
+                                <br/>
+                                Click on the button below to pick a password,
+                                activate your account and see the invoice.
+                            </div>
+                            <a t-att-href="user_exists.signup_url"
+                               class="btn btn-primary mt-2">
+                                <strong>Activate Account</strong>
+                            </a>
+                        </t>
+                    </t>
+                    <t t-elif="message == 'sign_ok' and sale_order._has_to_be_paid()">
+                        Your order has been signed but still needs to be paid to
+                        be confirmed.
+                    </t>
+                    <t t-else="">Your order has been signed.</t>
+                </div>
+            </t>
+            <t t-else="">
+                <div t-if="message == 'sign_ok'"
+                     class="alert alert-success alert-dismissible d-print-none"
+                     role="status">
+                    <button type="button" class="btn-close"
+                            data-bs-dismiss="alert" aria-label="Close"></button>
+                    <strong>Thank You!</strong>
+                    <br/>
+                    <t t-if="message == 'sign_ok' and sale_order.state in ['sale', 'done']">
+                        Your order has been confirmed.
+                    </t>
+                    <t t-elif="message == 'sign_ok' and sale_order._has_to_be_paid()">
+                        Your order has been signed but still needs to be paid to
+                        be confirmed.
+                    </t>
+                    <t t-else="">Your order has been signed.</t>
+                </div>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="taxsurety_so_portal_content"
+              name="Taxsurety Sale Order Portal Content"
+              inherit_id="sale.sale_order_portal_content">
+        <xpath expr="//div[@t-if='invoices']" position="replace">
+            <t t-if="website.is_customer_downpayment_enabled">
+                <div t-if="invoices" class="row">
+                    <div class="col">
+                        <strong class="d-block mb-1">Invoices</strong>
+                        <ul class="list-group mb-4">
+                            <t t-foreach="invoices" t-as="i">
+                                <t t-set="report_url"
+                                   t-value="i.get_portal_url(report_type='pdf', download=True)"/>
+                                <t t-set="authorized_tx_ids"
+                                   t-value="i.transaction_ids.filtered(lambda tx: tx.state == 'authorized')"/>
+                                <div class="d-flex flex-wrap align-items-center justify-content-between">
+                                    <div>
+                                        <a t-att-href="report_url">
+                                            <span t-out="i.name"/>
+                                        </a>
+                                        <div class="small d-lg-inline-block">
+                                            Date:
+                                            <span class="text-muted"
+                                                  t-field="i.invoice_date"/>
+                                        </div>
+                                    </div>
+                                    <h4>
+                                    <span t-if="i.payment_state in ('paid', 'in_payment')"
+                                          class="small badge text-bg-success orders_label_text_align">
+                                        <i class="fa fa-fw fa-check"/>
+                                        Paid
+                                    </span>
+                                    <span t-elif="authorized_tx_ids"
+                                          class="small badge text-bg-success orders_label_text_align">
+                                        <i class="fa fa-fw fa-check"/>
+                                        Authorized
+                                    </span>
+                                    <span t-else=""
+                                          class="small badge text-bg-info orders_label_text_align">
+                                        <i class="fa fa-fw fa-clock-o"/>
+                                        Waiting Payment
+                                    </span>
+                                    </h4>
+                                </div>
+                            </t>
+                        </ul>
+                    </div>
+                </div>
+            </t>
+            <t t-else="">
+                <div t-if="invoices" class="row">
+                    <div class="col">
+                        <strong class="d-block mb-1">Invoices</strong>
+                        <ul class="list-group mb-4">
+                            <t t-foreach="invoices" t-as="i">
+                                <t t-set="report_url"
+                                   t-value="i.get_portal_url(report_type='pdf', download=True)"/>
+                                <t t-set="authorized_tx_ids"
+                                   t-value="i.transaction_ids.filtered(lambda tx: tx.state == 'authorized')"/>
+                                <div class="d-flex flex-wrap align-items-center justify-content-between">
+                                    <div>
+                                        <a t-att-href="report_url">
+                                            <span t-out="i.name"/>
+                                        </a>
+                                        <div class="small d-lg-inline-block">
+                                            Date:
+                                            <span class="text-muted"
+                                                  t-field="i.invoice_date"/>
+                                        </div>
+                                    </div>
+                                    <span t-if="i.payment_state in ('paid', 'in_payment')"
+                                          class="small badge text-bg-success orders_label_text_align">
+                                        <i class="fa fa-fw fa-check"/>
+                                        <b>Paid</b>
+                                    </span>
+                                    <span t-elif="authorized_tx_ids"
+                                          class="small badge text-bg-success orders_label_text_align">
+                                        <i class="fa fa-fw fa-check"/>
+                                        <b>Authorized</b>
+                                    </span>
+                                    <span t-else=""
+                                          class="small badge text-bg-info orders_label_text_align">
+                                        <i class="fa fa-fw fa-clock-o"/>
+                                        <b>Waiting Payment</b>
+                                    </span>
+                                </div>
+                            </t>
+                        </ul>
+                    </div>
+                </div>
+            </t>
+        </xpath>
+    </template>
+
+
+</odoo>

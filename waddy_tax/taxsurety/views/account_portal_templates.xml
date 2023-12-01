@@ -26,7 +26,7 @@
                                     <t t-esc="website.company_id.currency_id.symbol"/>
                                 </span>
                                 <input id="price_display_input"
-                                       t-att-value="invoice.down_payment_amount if invoice.down_payment_amount else '0.00'"
+                                       t-att-value="'{0:.2f}'.format(invoice.down_payment_amount) if invoice.down_payment_amount else '0.00'"
                                        style="width: 90%; text-align: right;"
                                        name="down_payment_amount"
                                        t-att-readonly="invoice.is_downpayment"
@@ -73,7 +73,7 @@
             <t t-set="title" t-else="">
                 <t t-if="invoice.payment_state not in ('paid', 'in_payment') and invoice.move_type == 'out_invoice'">
                     <div class="small">
-                        Down payment initiated for <t t-esc="website.company_id.currency_id.symbol"/>  <t t-esc="invoice.down_payment_amount"/>
+                        Down payment initiated for <t t-esc="website.company_id.currency_id.symbol"/> <t t-esc="'{:,.2f}'.format(invoice.down_payment_amount)"/>
                     </div>
                     <div class="small">
                         To pay in full, cancel Down Payment
@@ -86,11 +86,18 @@
                     <b t-if="invoice.amount_residual > 0" t-field="invoice.amount_residual"/>
                     <b t-else="1" t-field="invoice.amount_total"/>
                 </h2>
+                <t t-if="invoice.payment_state not in ('paid', 'in_payment') and invoice.move_type == 'out_invoice'">
+                    <div class="small">
+                        Balance amount:
+                    </div>
+                    <h2 class="mb-0">
+                        <b t-esc="website.company_id.currency_id.symbol"/>
+                    <b t-esc="'{:,.2f}'.format(invoice.amount_residual - invoice.down_payment_amount)"/>
+                </h2>
+                </t>
                 <div class="small" t-if="invoice.payment_state not in ('paid', 'in_payment') and invoice.move_type == 'out_invoice'"><i class="fa fa-clock-o"/><span class="o_portal_sidebar_timeago ml4" t-att-datetime="invoice.invoice_date_due"/></div>
             </t>
-
         </xpath>
-
     </template>
 
 </odoo>

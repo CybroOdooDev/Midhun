@@ -28,5 +28,7 @@ class AccountMove(models.Model):
 
     is_downpayment = fields.Boolean(string="Downpayment enabled",
                                     default=False)
-    down_payment_amount = fields.Float(string="Downpayment amount",
-                                       default=0.00)
+    down_payment_amount = fields.Monetary(string="Downpayment amount",
+                                          default=0.00,
+                                          copy=False,
+                                          currency_field='company_currency_id')
