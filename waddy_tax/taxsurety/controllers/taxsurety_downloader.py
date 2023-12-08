@@ -94,11 +94,18 @@ class TaxSuretyDownloader(http.Controller):
     def documents_create_workspace(self, **post):
         if post.get('workspace_name'):
             last_name_alphabet = request.env.user.name.split()[-1][0].upper()
+            f_and_l_name = request.env.user.name.split()
+            l_name = f_and_l_name[-1]
+            f_name = ' '.join([str(name) for name in f_and_l_name[:-1]])
+            if len(f_and_l_name) > 1:
+                doc_name = l_name + ', ' + f_name
+            else:
+                doc_name = l_name
             tax_preparation_customers_workspace = request.env[
                 'documents.folder'].sudo().search([
                     ('name', '=', 'Tax Preparation Customers')], limit=1)
             user_folder = request.env['documents.folder'].sudo().search([
-                ('name', '=', request.env.user.name),
+                ('name', '=', doc_name),
                 ('parent_folder_id.name', '=', request.env.user.name.split()[-1][0].upper())
             ], limit=1)
             if not user_folder:
@@ -121,7 +128,7 @@ class TaxSuretyDownloader(http.Controller):
                         })
                 user_folder = request.env['documents.folder'].with_context(
                     mail_create_nosubscribe=True).sudo().create({
-                    'name': request.env.user.name,
+                    'name': doc_name,
                     'parent_folder_id': last_name_alphabet_folder.id
                 })
             folder = request.env['documents.folder'].sudo().create({

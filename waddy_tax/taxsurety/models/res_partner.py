@@ -102,20 +102,6 @@ class ResPartner(models.Model):
             through message_process.
             This override updates the document according to the email.
         """
-
-        # if msg.get('subject') == 'Favorable Introduction':
-        #     if msg.get('recipients'):
-        #         emails = re.findall(r"[a-z0-9\.\-+_]+@[a-z0-9\.\-+_]+\.[a-z]+", msg.get('recipients'))
-        #         for rec in emails:
-        #             if not self.search([('email', '=', rec)]):
-        #                 contact = self.create({
-        #                     'name': rec,
-        #                     'email': rec
-        #                 })
-        #                 contact.with_context(mail_create_nosubscribe=True).message_post(
-        #                     subject=_(msg.get('subject')),
-        #                     body=_('Contact created from email.' + msg.get('body')),
-        #                     message_type='comment')
         result = super(ResPartner, self).message_new(msg, custom_values=custom_values)
         if msg.get('subject') == 'Favorable Introduction':
             if msg.get('recipients'):

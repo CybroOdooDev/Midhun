@@ -22,16 +22,18 @@
 
 {
     'name': "Taxsurety",
-    'version': '16.0.1.1.6',
+    'version': '16.0.1.1.8',
     'category': 'Accounting',
     'summary': """Taxsurety custom module.""",
     'description': """Taxsurety custom module.""",
     'depends': ['account_accountant',
                 'contacts', 'portal',
                 'documents', 'website', 'mail',
+                'sign', 'survey',
                 'website_sale'],
     'data': [
         'security/group_taxsurety.xml',
+        'data/tax_return_completed_email_template.xml',
         'data/document_mail_template.xml',
         'data/missing_document_email_template.xml',
         'views/documents_folder_views.xml',
@@ -45,6 +47,7 @@
         'views/account_portal_templates.xml',
         'views/sale_portal_templates.xml',
         'views/survey_poweredby.xml',
+        'wizards/sign_send_request_views.xml',
     ],
     'assets': {
         'web.assets_frontend': [

@@ -189,4 +189,3 @@ class TaxsuretyPortalChatter(PortalChatter):
                           ['id', 'name', 'mimetype', 'file_size',
                            'access_token'])})
         return result
-

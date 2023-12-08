@@ -19,9 +19,4 @@
 #    DEALINGS IN THE SOFTWARE.
 #
 ########################################################################################
-
-from . import account_move
-from . import documents_folder
-from . import res_partner
-from . import sign_request_item
-from . import website
+from . import sign_send_request

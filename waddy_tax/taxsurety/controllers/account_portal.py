@@ -24,7 +24,7 @@ from odoo.exceptions import ValidationError
 from odoo.addons.account.controllers.portal import PortalAccount
 from odoo.addons.account_payment.controllers.payment import PaymentPortal
 from odoo.exceptions import AccessError, MissingError
-from odoo.http import request
+from odoo.http import request, route
 
 
 class TaxsuretyDownpayment(PortalAccount):
@@ -81,6 +81,7 @@ class TaxsuretyDownpayment(PortalAccount):
 
 class TaxsuretyPayment(PaymentPortal):
 
+    @route()
     def invoice_transaction(self, invoice_id, access_token, **kwargs):
         """
         Clear is_downpayment and down_payment_amount after payment.
@@ -103,4 +104,3 @@ class TaxsuretyPayment(PaymentPortal):
             raise ValidationError(_("The access token is invalid."))
         return super().invoice_transaction(invoice_id, access_token,
                                                        **kwargs)
-

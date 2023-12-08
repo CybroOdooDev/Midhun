@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+     <data noupdate="0">
+        <!--Email template for Tax Return Completed customers -->
+        <record id="tax_return_completed" model="mail.template">
+            <field name="name">Tax Return Completed: Notification</field>
+            <field name="model_id" ref="base.model_res_partner"/>
+            <field name="subject">Your Return is Uploaded: </field>
+            <field name="description">Notify customers their tax return is completed</field>
+            <field name="auto_delete" eval="False"/>
+            <field name="body_html" type="html">
+<div style="margin: 0px; padding: 0px;">
+    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+        Dear
+            <t t-esc="object.name"/>,
+        <br/>
+        Hope you are doing well.<br/>
+        We have updated your tax returns.<br/>
+        <t t-if="object.etp_q1">
+            Your estimated Q1 saving is: <t t-esc="object.etp_q1"/>
+            <br/>
+        </t>
+        <t t-if="object.etp_q2">
+            Your estimated Q2 saving is: <t t-esc="object.etp_q2"/>
+            <br/>
+        </t>
+        <t t-if="object.etp_q3">
+            Your estimated Q3 saving is: <t t-esc="object.etp_q3"/>
+            <br/>
+        </t>
+        <t t-if="object.etp_q4">
+            Your estimated Q4 saving is: <t t-esc="object.etp_q4"/>
+            <br/>
+        </t>
+        <t t-if="object.est_savings">
+            Your estimated savings in total is: <t t-esc="object.est_savings"/>
+            <br/>
+        </t>
+
+        <t t-if="object.federal_return_results">
+            Your Federal return results: <t t-esc="object.federal_return_results"/>
+            <br/>
+        </t>
+        <t t-if="object.state_return_results">
+            Your State return results: <t t-esc="object.state_return_results"/>
+            <br/>
+        </t>
+        <t t-if="object.bank_name and object.bank_accnt_no and object.routing_no">
+            Please confirm your banking info below to where the IRS can directly credit/debit your Federal and state tax refund/due when we e-file your return:<br/>
+                Bank Name: <t t-esc="object.bank_name"/><br/>
+                Routing No.: <t t-esc="object.routing_no"/><br/>
+                Account No.: <t t-esc="object.bank_accnt_no"/><br/>
+            <br/>
+        </t>
+    </p>
+</div>
+            </field>
+        </record>
+
+<!--<record id="tax_return_completed_sign" model="mail.template">-->
+<!--            <field name="name">Tax Return Completed: Notification</field>-->
+<!--            <field name="model_id" ref="sign.model_sign_send_request"/>-->
+<!--            <field name="subject">Your Return is Uploaded: </field>-->
+<!--            <field name="description">Notify customers their tax return is completed</field>-->
+<!--            <field name="auto_delete" eval="False"/>-->
+<!--            <field name="body_html" type="html">-->
+<!--<div style="margin: 0px; padding: 0px;">-->
+<!--    <p style="margin: 0px; padding: 0px; font-size: 13px;">-->
+<!--        Dear object.name,-->
+<!--        <br/>-->
+<!--        Hope you are doing well.<br/>-->
+<!--        We have updated your tax returns.<br/>-->
+<!--    </p>-->
+<!--</div>-->
+<!--            </field>-->
+<!--        </record>-->
+     </data>
+</odoo>

@@ -20,11 +20,12 @@
 #
 ########################################################################################
 
-from odoo.http import request
+from odoo.http import request, route
 from odoo.addons.website_sale.controllers.main import WebsiteSale
 
 
 class TaxsuretyShop(WebsiteSale):
+    @route()
     def shop(self, page=0, category=None, search='', min_price=0.0,
              max_price=0.0, ppg=False, **post):
         if request.website.is_shop_disabled:
@@ -34,18 +35,21 @@ class TaxsuretyShop(WebsiteSale):
                                 search=search, ppg=ppg, min_price=min_price,
                                 max_price=max_price, **post)
 
+    @route()
     def shop_payment(self, **post):
         if request.website.is_shop_disabled:
             return request.redirect('/')
         else:
             return super().shop_payment(**post)
 
+    @route()
     def checkout(self, **post):
         if request.website.is_shop_disabled:
             return request.redirect('/')
         else:
             return super().checkout(**post)
 
+    @route()
     def shop_payment_confirmation(self, **post):
         if request.website.is_shop_disabled:
             return request.redirect('/')

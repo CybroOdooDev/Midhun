@@ -46,4 +46,9 @@
             </xpath>
         </field>
     </record>
+
+    <record id="mail.action_partner_mass_mail"
+            model="ir.actions.act_window">
+        <field name="binding_view_types">form,list</field>
+    </record>
 </odoo>

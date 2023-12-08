@@ -40,6 +40,9 @@
 a.list-group-item.list-group-item-action.d-flex.align-items-center.justify-content-between.d-none[href="/my/documents/"] {
     display: flex !important;
 }
+a.list-group-item.list-group-item-action.d-flex.align-items-center.justify-content-between.d-none[href="/my/signatures"] {
+    display: flex !important;
+}
 
 #loader__container {
     position: fixed;
@@ -94,5 +97,11 @@ i.edit_document:hover {
 /* Firefox */
 #price_display_input {
   -moz-appearance: textfield;
+}
+
+div.o_sign_validate_banner button{
+    padding: 20px;
+    margin-bottom: 20px;
+    font-size: larger;
 }
 
