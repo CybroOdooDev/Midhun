@@ -237,7 +237,6 @@ class TaxSuretyPortal(CustomerPortal):
         return values
 
     # Document full page
-
     @http.route(['/my/documents/<int:doc>'], type='http',
                 auth='user', website=True)
     def portal_documents_view(self, **kw):
@@ -247,14 +246,27 @@ class TaxSuretyPortal(CustomerPortal):
         if document.owner_id.id != user.id and\
                 document.partner_id.id != user.partner_id.id\
                 and user.partner_id.id not in document.message_follower_ids.partner_id.ids\
-                and document.folder_id.message_follower_ids.partner_id in  request.env.user.partner_id.ids:
+                and not set(document.folder_id.message_follower_ids.partner_id.ids).intersection(set(request.env.user.partner_id.ids)):
             raise AccessError(
                 _("Sorry you are not allowed to access this document"))
         else:
+            workspace = request.env['documents.folder'].sudo()
+            empty_document_folders = workspace.search([
+                    ('message_follower_ids.partner_id',
+                     'in', request.env.user.partner_id.ids)])
+            documents = request.env['documents.document'].sudo().search([
+                '|', '|', ('message_follower_ids.partner_id',
+                           'in', request.env.user.partner_id.ids),
+                          ('partner_id', '=', request.env.user.partner_id.id),
+                          ('owner_id', '=', request.env.user.id)])
+            folder_ids = list(set(
+                empty_document_folders.ids + documents.folder_id.ids))
+            workspaces = workspace.browse(folder_ids)
             return request.render('taxsurety.document_details',
                                   {'document': document,
                                    'page_name': 'document_details',
-                                   'document_access': True})
+                                   'document_access': True,
+                                   'workspaces': workspaces})
 
     # Update Document
     @http.route(['/my/documents/update'], type='http',

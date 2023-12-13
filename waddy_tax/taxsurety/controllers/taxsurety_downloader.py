@@ -45,7 +45,8 @@ class TaxSuretyDownloader(http.Controller):
             raise NotFound()
         if document.owner_id.id != user.id and \
                 document.partner_id.id != user.partner_id.id \
-                and user.partner_id.id not in document.message_follower_ids.partner_id.ids:
+                and user.partner_id.id not in document.message_follower_ids.partner_id.ids\
+                and not set(document.folder_id.message_follower_ids.partner_id.ids).intersection(set(request.env.user.partner_id.ids)):
             raise AccessError(
                 _("Sorry you are not allowed to access this document"))
         else:

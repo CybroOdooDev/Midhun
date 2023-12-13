@@ -61,7 +61,13 @@
                                                 <t t-esc="doc_fold.name"/>
                                             </span>
                                         </div>
-                                        <div>
+                                        <div style="display: flex; align-items: center;">
+                                            <i class="delete_document_workspace fa fa-trash"
+                                                style="margin-right: 20px;"
+                                                t-att-data-folder-id="doc_fold.id"
+                                                t-att-data-folder-name="doc_fold.name"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#DeleteDocumentFolder"/>
                                             <i class="edit_document fa fa-edit"
                                                data-bs-toggle="modal"
                                                t-att-data-folder-id="doc_fold.id"
@@ -154,7 +160,6 @@
                 </div>
             </div>
 
-
             <!--EDIT DOCUMENT WORKSPACE-->
 
             <div class="modal se-modal"
@@ -186,6 +191,7 @@
                                   action="/my/documents/folder/edit"
                                   method="post"
                                   enctype="multipart/form-data">
+
                                 <input id="workspace_id"
                                        type="hidden"
                                        name="workspace_id"
@@ -213,6 +219,67 @@
                 </div>
             </div>
 
+            <!-- DELETE DOCUMENT WORKSPACE-->
+
+            <div class="modal se-modal"
+                 id="DeleteDocumentFolder"
+                 tabindex="-1"
+                 role="dialog"
+                 t-att-aria-labelledby="DeleteDocumentFolder"
+                 aria-hidden="true">
+                <div class="modal-dialog se-modal__dialog"
+                     role="document">
+                    <div class="modal-content se-modal__content">
+                        <div class="modal-header">
+                            <h5 class="modal-title se-modal__title">
+                            </h5>
+                            <button type="button"
+                                    class="close"
+                                    data-bs-dismiss="modal"
+                                    aria-label="Close">
+                                <span aria-hidden="false">
+                                    X
+                                </span>
+                            </button>
+                        </div>
+                        <div class="modal-body upload--document-modal">
+                            <form class="upload_form submission__form"
+                                  style="display:flex; justify-content: center; flex-direction: column;"
+                                  action="/my/documents_workspace/delete"
+                                  method="post"
+                                  enctype="multipart/form-data">
+                                <input id="document_workspace_id"
+                                       type="hidden"
+                                       name="document_workspace_id"
+                                />
+                                <input type="hidden"
+                                       name="csrf_token"
+                                       t-att-value="request.csrf_token()"/>
+
+                                <div class=""
+                                     style="display: flex; justify-content: center;">
+                                    <h5>
+                                        Are you sure you want to delete this Workspace?
+                                    </h5>
+                                </div>
+                                <div class="delete_buttons"
+                                     style="display: flex; justify-content: space-around;">
+                                    <input type="submit"
+                                           value="Delete"
+                                           class="btn btn-primary mt-4"/>
+                                    <input type="button"
+                                           value="Cancel"
+                                        class="close btn btn-primary mt-4"
+                                        data-bs-dismiss="modal"
+                                        aria-label="Close">
+                                    </input>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <div class="modal se-modal"
                  id="UploadDocumentModal"
@@ -282,7 +349,7 @@
                 </div>
             </div>
 
-            <!--            Create Work space-->
+            <!--Create Work space-->
 
             <div class="create_ws">
                 <button class="btn btn-primary mt-2"
@@ -376,7 +443,7 @@
                                         <span class="text-truncate"
                                               t-field="documents[0].sudo().folder_id.name"/>
                                     </div>
-                                    <div>
+                                    <div style="display: flex; align-items: center;">
                                         <i class="edit_document fa fa-edit"
                                            data-bs-toggle="modal"
                                            t-att-data-folder-id="documents[0].sudo().folder_id.id"

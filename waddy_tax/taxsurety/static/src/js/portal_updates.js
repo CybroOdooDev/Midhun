@@ -7,7 +7,8 @@ odoo.define('taxsurety.portal_updates', function(require) {
             'click a[data-bs-target="#UpdateContactFolders"]': '_onUpdateContactFolders',
             'click a[data-bs-target="#UpdateOthers"]': '_onUpdateOthers',
             'click a[data-bs-target="#UpdateExpiration"]': '_onUpdateExpiration',
-            },
+            'click .delete_document_workspace': '_onDeleteDocumentWorkspace',
+        },
         _onUpdateContactFolders: function (event) {
             this.$el.find(
             '#UpdateContactFolders h5.se-modal__title').text(
@@ -26,7 +27,14 @@ odoo.define('taxsurety.portal_updates', function(require) {
             'value', this.$el.find(
             '#UpdateExpiration input#year').val() + '-' + this.$el.find(
             '#UpdateExpiration input#month').val())
-
         },
+//        Deleting workspace
+        _onDeleteDocumentWorkspace: function (event) {
+            this.$el.find(
+            '#DeleteDocumentFolder h5.se-modal__title').text(
+            'Delete folder ' + event.currentTarget.getAttribute('data-folder-name'));
+            this.$el.find('#DeleteDocumentFolder input#document_workspace_id').val(
+            event.currentTarget.getAttribute('data-folder-id'));
+        }
     });
 });

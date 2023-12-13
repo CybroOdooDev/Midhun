@@ -61,3 +61,27 @@ class PortalUpdates(http.Controller):
             'cc_exp_date_year': str(year),
         })
         return request.redirect('/my/home')
+
+#     Delete workspace
+    @http.route(['/my/documents_workspace/delete'], type='http',
+                auth="user", website=True, csrf=False)
+    def delete_workspace(self, **post):
+        if post.get('document_workspace_id'):
+            document_workspace = request.env[
+                'documents.folder'].sudo().browse(
+                    int(post.get('document_workspace_id')))
+            if document_workspace:
+                document_workspace.unlink()
+        return request.redirect('/my/documents')
+
+# ---- Change workspace of document
+    @http.route(['/my/documents/folder/change'], type='http',
+                auth='user', website=True, csrf=False)
+    def folder_change(self, **post):
+        if post.get('document_id') and post.get('folder_id'):
+            document = request.env['documents.document'].sudo().browse(
+                int(post.get('document_id')))
+            workspace = request.env['documents.folder'].sudo().browse(
+                int(post.get('folder_id')))
+            document.folder_id = workspace.id
+            return request.redirect('/my/documents/%s' % document.id)

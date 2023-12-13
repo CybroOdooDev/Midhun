@@ -56,23 +56,5 @@
 </div>
             </field>
         </record>
-
-<!--<record id="tax_return_completed_sign" model="mail.template">-->
-<!--            <field name="name">Tax Return Completed: Notification</field>-->
-<!--            <field name="model_id" ref="sign.model_sign_send_request"/>-->
-<!--            <field name="subject">Your Return is Uploaded: </field>-->
-<!--            <field name="description">Notify customers their tax return is completed</field>-->
-<!--            <field name="auto_delete" eval="False"/>-->
-<!--            <field name="body_html" type="html">-->
-<!--<div style="margin: 0px; padding: 0px;">-->
-<!--    <p style="margin: 0px; padding: 0px; font-size: 13px;">-->
-<!--        Dear object.name,-->
-<!--        <br/>-->
-<!--        Hope you are doing well.<br/>-->
-<!--        We have updated your tax returns.<br/>-->
-<!--    </p>-->
-<!--</div>-->
-<!--            </field>-->
-<!--        </record>-->
      </data>
 </odoo>

@@ -5,7 +5,6 @@
             <div class="o_portal_html_view shadow p-3 mt-3 row o_portal_custom">
                 <div class="col col--preview-container"
                      style="text-align: center;">
-
                     <t t-if="document.type == 'binary'">
                         <img t-if="document.attachment_id.index_content == 'image'"
                              class="doc_image"
@@ -28,13 +27,12 @@
                         </div>
 
                         <label for="doc_uploader_details"
-                               class="mt-2"
+                               class="mt-2 mb-2"
                                id="label_for_doc_uploader_document_upload"
                                style="display: flex; justify-content: center; width: inherit;">
                             <div id="reUploadButton"
-                                    class="reupload_button btn btn-primary"
-                                 >
-                            Re-upload
+                                 class="reupload_button btn btn-primary">
+                                Re-upload
                             </div>
                         </label>
 
@@ -49,7 +47,7 @@
                     <t t-elif="document.type == 'empty'">
                         Click on the image to upload file.
                         <label for="doc_uploader_details"
-                               class="mt-2"
+                               class="mt-2 mb-2"
                                id="label_for_doc_uploader_document_upload"
                                style="display: flex; justify-content: center; width: inherit;">
                             <img id="doc_uploaded"
@@ -109,10 +107,18 @@
                         </div>
                         <div t-if="document.folder_id" class="doc-owner">
                             Workspace:
-                            <a class="btn btn-primary tag-span"
-                                    t-esc="document.folder_id.name"
-                                    t-att-href="'/my/documents?search_in=workspace&amp;search=%s' %document.folder_id.name"
-                                    t-att-title="document.folder_id.name"/>
+                            <div class="workspace-load">
+                                <a class="btn btn-primary tag-span"
+                                   t-esc="document.folder_id.name"
+                                   t-att-href="'/my/documents?search_in=workspace&amp;search=%s' %document.folder_id.name"
+                                   t-att-title="document.folder_id.name"/>
+                                <i class="change_workspace fa fa-undo"
+                                   title="Change Workspace."
+                                   data-bs-toggle="modal"
+                                   t-att-data-document-id="document.id"
+                                   t-att-data-folder-id="document.folder_id.id"
+                                   data-bs-target="#ChangeDocumentFolder"/>
+                            </div>
                         </div>
                         <div class="doc-tags">
                             Tags:
@@ -158,7 +164,70 @@
                     <t t-set="document" t-value="document"/>
                     <t t-set="document_access" t-value="True"/>
                 </t>
+            </div>
 
+<!--         Update Workspace   -->
+
+            <div class="modal se-modal"
+                 id="ChangeDocumentFolder"
+                 tabindex="-1"
+                 role="dialog"
+                 t-att-aria-labelledby="ChangeDocumentFolder"
+                 aria-hidden="true">
+
+                <div class="modal-dialog se-modal__dialog"
+                     role="document">
+                    <div class="modal-content se-modal__content">
+                        <div class="modal-header">
+                            <h5 class="modal-title se-modal__title document">
+                                Change Workspace
+                            </h5>
+                            <button type="button"
+                                    class="close"
+                                    data-bs-dismiss="modal"
+                                    aria-label="Close">
+                                <span aria-hidden="false">
+                                    X
+                                </span>
+                            </button>
+                        </div>
+                        <div class="modal-body upload--document-modal">
+                            <form class="upload_form submission__form"
+                                  style="display:flex; justify-content: center; flex-direction: column;"
+                                  action="/my/documents/folder/change"
+                                  method="post"
+                                  enctype="multipart/form-data">
+
+                                <input id="document_id"
+                                       type="hidden"
+                                       name="document_id"
+                                       t-att-value="document.id"
+                                />
+                                <select name="folder_id"
+                                        id="folder_id"
+                                        class="form-control">
+                                    <t t-foreach="workspaces or []"
+                                       t-as="workspace">
+                                        <option t-att-value="workspace.id">
+                                            <t t-esc="workspace.name"/>
+                                        </option>
+                                    </t>
+                                </select>
+
+                                <input type="hidden"
+                                       name="csrf_token"
+                                       t-att-value="request.csrf_token()"/>
+
+                                <div style="display: contents;">
+                                    <input type="submit"
+                                           class="btn btn-primary mt-4"/>
+                                </div>
+
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
             </div>
 
         </t>

@@ -21,8 +21,8 @@
 ########################################################################################
 
 from odoo import models, fields, _
-from werkzeug.urls import url_join, url_quote
-from odoo.tools import config, get_lang, is_html_empty, formataddr, groupby, format_date
+from werkzeug.urls import url_join
+from odoo.tools import get_lang, is_html_empty, formataddr
 
 
 class SignRequest(models.Model):
@@ -94,7 +94,8 @@ class SignRequestItem(models.Model):
             self.env['sign.request']._message_send_mail(
                 body, 'mail.mail_notification_light',
                 {'record_name': signer.sign_request_id.reference},
-                {'model_description': _('Signature'), 'company': signer.communication_company_id or signer.sign_request_id.create_uid.company_id},
+                {'model_description': _('Signature'),
+                 'company': signer.communication_company_id or signer.sign_request_id.create_uid.company_id},
                 {'email_from': signer.create_uid.email_formatted,
                  'author_id': signer.create_uid.partner_id.id,
                  'email_to': formataddr((signer.partner_id.name, signer.signer_email)),
